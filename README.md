@@ -49,7 +49,7 @@ A thing name is unique inside an account and Region. When environments share an 
 
 ## From one farm to 200
 
-The sample proves the module with one farm. Reaching 200 means repeating the call with `for_each` over a map of farms, or using AWS fleet provisioning, where each node registers itself at installation with a temporary claim. Fleet provisioning fits a single visit better, since it asks nothing of Terraform at install time, and it remains the choice for the real rollout.
+The sample proves the module with one farm. Reaching 200 means repeating the call with `for_each` over a map of nodes. Each node is provisioned before shipment, where it generates its key pair and its certificate request, so the installer runs nothing at the farm and handles no secret. Fleet provisioning with a claim was discarded, since a claim is a credential shared by every node that uses it.
 
 ## Inputs
 
