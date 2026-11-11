@@ -2,13 +2,11 @@
 
 Reusable module of one Aroma Pacifico farm. The platform has no per-farm network, so a farm exists in the cloud as an identity, and this module creates that identity for one node. It repeats with no effort from 1 to 200 farms. It implements box C10 of the implementation scope.
 
-This repository holds the skeleton and the interface the module commits to. The resources arrive with the first release, and no version tag exists yet.
-
 ## What it creates
 
 | Resource | Purpose |
 |---|---|
-| IoT thing | Record of the node, with farm, department and zones as attributes |
+| IoT thing | Record of the node, with farm and department as attributes |
 | Group membership | Places the node in its department, for cost and operations |
 | Certificate from a CSR | Identity of the node |
 | Policy and thing attachments | Tie the certificate to the shared policy and to the thing |
@@ -47,6 +45,8 @@ module "farm" {
 
 A thing name is unique inside an account and Region. When environments share an account, each one uses its own sample node.
 
+Validation rejects a request that is not a PEM certificate signing request, any text that holds a private key, and a node name outside `node-` followed by lowercase letters, digits and hyphens.
+
 ## From one farm to 200
 
 The sample proves the module with one farm. Reaching 200 means repeating the call with `for_each` over a map of nodes. Each node is provisioned before shipment, where it generates its key pair and its certificate request, so the installer runs nothing at the farm and handles no secret. Fleet provisioning with a claim was discarded, since a claim is a credential shared by every node that uses it.
@@ -70,11 +70,11 @@ The sample proves the module with one farm. Reaching 200 means repeating the cal
 | `thing_name` | Name of the thing |
 | `thing_arn` | ARN of the thing |
 | `certificate_arn` | ARN of the certificate |
-| `certificate_pem` | Public certificate to install on the node |
+| `certificate_pem` | Public certificate to install on the node. The provider marks it sensitive, and the module exposes it as plain text since a certificate is public |
 
 ## Destroying an environment
 
-An active certificate with attachments blocks its own deletion, so the module detaches and deactivates it first. A destroy therefore leaves no identity behind.
+An active certificate with attachments blocks its own deletion. Terraform removes the policy and thing attachments first, and the provider deactivates the certificate before it deletes it, so a destroy leaves no identity behind.
 
 ## Cost
 
@@ -82,7 +82,7 @@ Things, certificates and policies have no charge. IoT Core bills connections and
 
 ## Develop and test
 
-The exact Terraform version lives in `.terraform-version`. Tests run against a mocked provider, so they need no AWS account and spend no credits.
+The exact Terraform version lives in `.terraform-version`. Tests run against a mocked provider, so they need no AWS account and spend no credits. `tests/fixtures/node.csr` is the public request of a test key pair whose private key never entered the repository.
 
 ```bash
 terraform init -backend=false
