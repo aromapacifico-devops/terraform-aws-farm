@@ -1,4 +1,6 @@
 # Input variables of the module.
+# Governance input of every module, kept although no resource here reads it.
+# tflint-ignore: terraform_unused_declarations
 variable "client" {
   description = "Client code, used in names and tags."
   type        = string
@@ -9,6 +11,8 @@ variable "client" {
   }
 }
 
+# Governance input of every module, kept although no resource here reads it.
+# tflint-ignore: terraform_unused_declarations
 variable "project" {
   description = "Project code, used in names and tags."
   type        = string
@@ -19,6 +23,8 @@ variable "project" {
   }
 }
 
+# Governance input of every module, kept although no resource here reads it.
+# tflint-ignore: terraform_unused_declarations
 variable "environment" {
   description = "Deployment environment."
   type        = string
@@ -29,6 +35,8 @@ variable "environment" {
   }
 }
 
+# Governance input of every module, kept although no resource here reads it.
+# tflint-ignore: terraform_unused_declarations
 variable "additional_tags" {
   description = "Tags added to the resources of this module, on top of the provider default tags."
   type        = map(string)
