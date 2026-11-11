@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0]
+
 ### Added
 
 - Identity of one farm node. IoT thing with farm and department attributes, membership in the department group, certificate signed from a request made on the device, and attachments of the shared policy and of the thing.
